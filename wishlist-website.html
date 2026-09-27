@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Wishlist: rank what you want and see what fits this month's budget.">
+<title>Wishlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+html { color-scheme: light; }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+
+:root {
+  --paper: #f6fafd;
+  --surface: #ffffff;
+  --sunk: #e6eef6;
+  --head: #e3f2fc;
+  --ink: #13202c;
+  --soft: #465666;
+  --muted: #5f6f7e;
+  --line: #dde9f3;
+  --blue: #8ecdf2;
+  --blue-hover: #74c0ee;
+  --blue-wash: #eaf6fd;
+  --blue-ink: #1f6fa8;
+  --on-blue: #0c2d48;
+  --drop: #b8620f;
+  --drop-wash: #fdf0e1;
+  --danger: #a33a2c;
+  --c-clothes: #e8739f; --c-home: #d99a2b; --c-tech: #7b8af0; --c-gifts: #2fae84; --c-other: #a585e0;
+  --shadow: 0 24px 60px rgba(12, 45, 72, .14), 0 2px 8px rgba(12, 45, 72, .06);
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0b1520; --surface: #111e2c; --sunk: #172537; --head: #14283c;
+    --ink: #e8f1f8; --soft: #b2c3d2; --muted: #8a9cad; --line: #22324a;
+    --blue: #8ecdf2; --blue-hover: #a8d9f6; --blue-wash: #15283b; --blue-ink: #9fd6f5; --on-blue: #0c2d48;
+    --drop: #f2a65a; --drop-wash: #2c2116; --danger: #ef8776;
+    --c-clothes: #d9608f; --c-home: #b97d12; --c-tech: #6f7fe6; --c-gifts: #239f77; --c-other: #9a78d6;
+    --shadow: 0 24px 60px rgba(0, 0, 0, .45), 0 2px 8px rgba(0, 0, 0, .3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0b1520; --surface: #111e2c; --sunk: #172537; --head: #14283c;
+  --ink: #e8f1f8; --soft: #b2c3d2; --muted: #8a9cad; --line: #22324a;
+  --blue: #8ecdf2; --blue-hover: #a8d9f6; --blue-wash: #15283b; --blue-ink: #9fd6f5; --on-blue: #0c2d48;
+  --drop: #f2a65a; --drop-wash: #2c2116; --danger: #ef8776;
+  --c-clothes: #d9608f; --c-home: #b97d12; --c-tech: #6f7fe6; --c-gifts: #239f77; --c-other: #9a78d6;
+  --shadow: 0 24px 60px rgba(0, 0, 0, .45), 0 2px 8px rgba(0, 0, 0, .3);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 24px; }
+@media (max-width: 480px) { .wrap { padding-inline: 16px; } }
+h1, h2, h3 { font-family: var(--display); letter-spacing: -0.025em; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--blue-ink); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--blue-ink); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- top bar ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 20px; text-decoration: none; color: var(--ink); }
+.w { width: 34px; height: 34px; border-radius: 9px; background: var(--blue); display: grid; place-items: center; flex: none; }
+.w svg { width: 21px; height: 21px; color: var(--on-blue); }
+.top nav { display: flex; gap: 22px; font-size: 15px; }
+.top nav a { color: var(--soft); text-decoration: none; }
+.top nav a:hover { color: var(--ink); }
+@media (max-width: 640px) { .top nav a:not(.nav-cta) { display: none; } }
+
+/* ---------- hero ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 56px; align-items: start; padding-block: 36px 72px; }
+@media (max-width: 920px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-block: 16px 56px; } }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-ink); margin-bottom: 18px; }
+.hero h1 { font-size: clamp(42px, 6.2vw, 80px); line-height: 1.06; font-weight: 800; }
+.hero h1 .under { position: relative; white-space: nowrap; }
+.hero h1 .under svg { position: absolute; left: 0; right: 0; bottom: -0.06em; width: 100%; height: .22em; color: var(--blue); overflow: visible; }
+.lede { font-size: 19px; color: var(--soft); max-width: 34ch; margin-top: 26px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; margin-top: 30px; }
+.cta { display: inline-flex; align-items: center; gap: 10px; background: var(--blue); color: var(--on-blue); border: 0; border-radius: 999px; padding: 13px 22px; font-weight: 700; font-size: 16px; text-decoration: none; cursor: pointer; }
+.cta:hover { background: var(--blue-hover); }
+.cta svg { width: 18px; height: 18px; }
+.cta-note { font-size: 14px; color: var(--muted); }
+.try-hint { margin-top: 38px; font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+.try-hint svg { width: 46px; height: 20px; color: var(--blue-ink); flex: none; }
+@media (max-width: 920px) { .try-hint svg { transform: rotate(90deg); width: 30px; } }
+
+/* ---------- the app ---------- */
+.app { background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--line); width: 100%; }
+.app-top { background: var(--head); padding: 16px 18px 0; }
+.app-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.app-title { font-family: var(--display); font-size: 20px; font-weight: 700; }
+.app-sub { font-size: 13.5px; color: var(--muted); }
+.icon-btn { border: 0; background: none; color: var(--muted); cursor: pointer; padding: 5px; border-radius: 7px; display: grid; place-items: center; }
+.icon-btn:hover { color: var(--ink); background: var(--surface); }
+.icon-btn svg { width: 18px; height: 18px; }
+.gauge { height: 5px; border-radius: 3px; background: var(--surface); margin: 12px 0 12px; overflow: hidden; }
+.gauge i { display: block; height: 100%; background: linear-gradient(90deg, var(--blue), var(--blue-ink)); border-radius: 3px; transition: width 240ms ease; }
+.gauge.over i { background: var(--danger); }
+.tabs { display: flex; gap: 2px; margin-inline: -6px; }
+.tab { border: 0; background: none; padding: 7px 10px 9px; font-weight: 600; font-size: 14px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--blue-ink); border-bottom-color: var(--blue-ink); }
+
+.example { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--drop-wash); color: var(--ink); padding: 9px 18px; font-size: 13px; }
+.example b { font-weight: 600; }
+.link-btn { border: 0; background: none; color: var(--blue-ink); font-weight: 600; cursor: pointer; padding: 0; text-decoration: underline; font-size: inherit; white-space: nowrap; }
+
+.pane { min-height: 330px; }
+.pane[hidden] { display: none; }
+.add { padding: 14px 18px; display: grid; gap: 8px; border-bottom: 1px solid var(--line); }
+.add-row { display: grid; grid-template-columns: minmax(0, 1fr) 112px auto; gap: 8px; }
+.field { display: flex; align-items: center; border: 1px solid var(--line); background: var(--paper); border-radius: 9px; padding: 0 11px; min-width: 0; }
+.field:focus-within { border-color: var(--blue-ink); }
+.field em { font-style: normal; color: var(--muted); font-size: 14px; margin-right: 3px; }
+.field input, .field select { border: 0; background: none; outline: none; width: 100%; padding: 9px 0; font-size: 14.5px; min-width: 0; }
+.btn { border: 0; border-radius: 9px; padding: 9px 16px; font-weight: 700; font-size: 14.5px; background: var(--blue); color: var(--on-blue); cursor: pointer; }
+.btn:hover { background: var(--blue-hover); }
+.btn-quiet { background: var(--surface); color: var(--ink); border: 1px solid var(--line); font-weight: 600; }
+.btn-quiet:hover { background: var(--blue-wash); }
+.more-toggle { justify-self: start; border: 0; background: none; padding: 0; color: var(--blue-ink); font-size: 13px; cursor: pointer; }
+.add-extra { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.add-extra[hidden] { display: none; }
+.add-extra .field:first-child { grid-column: 1 / -1; }
+@media (max-width: 420px) { .add-row { grid-template-columns: minmax(0, 1fr) 96px; } .add-row .btn { grid-column: 1 / -1; } }
+
+.list { list-style: none; margin: 0; padding: 0; }
+.item { display: grid; grid-template-columns: 18px 38px minmax(0, 1fr) auto; gap: 11px; align-items: center; padding: 10px 18px; border-top: 1px solid var(--line); cursor: pointer; background: color-mix(in srgb, var(--sunk) calc(var(--d, 0) * 100%), var(--surface)); }
+.item:first-child { border-top: 0; }
+.item:hover { background: color-mix(in srgb, var(--blue-wash) 75%, var(--surface)); }
+.item.open { background: var(--blue-wash); cursor: default; }
+.rank { font-size: 12.5px; color: var(--muted); }
+.tile { width: 38px; height: 38px; border-radius: 9px; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--on-blue); background: color-mix(in srgb, var(--cat, var(--blue)) 45%, var(--surface)); }
+:root[data-theme="dark"] .tile { color: var(--ink); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tile { color: var(--ink); } }
+.body { min-width: 0; }
+.t { font-weight: 600; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item.open .t { white-space: normal; overflow-wrap: anywhere; }
+.meta { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+.meta span { overflow: hidden; text-overflow: ellipsis; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cat); flex: none; }
+.st-cool { color: var(--blue-ink); font-weight: 600; }
+.note { font-size: 12.5px; font-style: italic; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.price { font-weight: 700; font-size: 15px; text-align: right; }
+.sunk .t, .sunk .price { color: var(--soft); }
+.sunk .tile { filter: saturate(.55); opacity: .85; }
+
+.details { grid-column: 3 / -1; display: grid; gap: 9px; padding-top: 4px; }
+.facts { font-size: 12.5px; color: var(--muted); }
+.details textarea { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 9px; padding: 7px 10px; font-size: 13.5px; resize: none; }
+.details textarea:focus { outline: none; border-color: var(--blue-ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 2px 9px 2px 7px; font-size: 12px; cursor: pointer; }
+.chip i { width: 9px; height: 9px; border-radius: 3px; background: var(--cat); }
+.chip[aria-pressed="true"] { border-color: var(--cat); background: color-mix(in srgb, var(--cat) 18%, var(--surface)); font-weight: 600; }
+.acts { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.acts .grow { flex: 1; }
+.mini { width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); cursor: pointer; margin-right: -6px; }
+.mini:disabled { opacity: .35; cursor: default; }
+.txt-btn { border: 0; background: none; padding: 0; font-size: 13px; color: var(--soft); cursor: pointer; text-decoration: none; }
+.txt-btn:hover { color: var(--danger); }
+a.txt-btn:hover { color: var(--blue-ink); }
+.pill { border: 0; border-radius: 999px; padding: 6px 16px; font-weight: 700; font-size: 13px; background: var(--blue); color: var(--on-blue); cursor: pointer; }
+.pill:hover { background: var(--blue-hover); }
+.pill.warn { background: var(--drop-wash); color: var(--drop); }
+
+.waterline { position: relative; height: 28px; color: var(--blue-ink); list-style: none; }
+.waterline svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.waterline b { position: absolute; right: 18px; top: 4px; font-size: 11.5px; font-weight: 700; background: var(--blue); color: var(--on-blue); padding: 1px 8px; border-radius: 4px; }
+.waterline.dry { color: var(--danger); }
+.waterline.dry b { background: var(--danger); color: #fff; }
+
+.empty { padding: 28px 18px; color: var(--muted); font-size: 14px; text-align: center; }
+.foot { padding: 11px 18px 13px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; }
+
+.bought .item { cursor: default; }
+.bought .rank { color: var(--blue-ink); }
+.bought .acts-h { display: none; gap: 12px; margin-top: 2px; }
+.bought .item:hover .acts-h, .bought .item:focus-within .acts-h { display: flex; }
+.log { padding: 14px 18px; border-bottom: 1px solid var(--line); display: grid; gap: 8px; }
+.log-open { border: 1px dashed var(--blue); background: var(--blue-wash); color: var(--blue-ink); border-radius: 10px; padding: 10px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.log-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+
+.hist { padding: 14px 18px; display: grid; gap: 4px; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px; }
+.stats div { background: var(--blue-wash); border-radius: 10px; padding: 9px 11px; }
+.stats b { display: block; font-family: var(--display); font-size: 20px; }
+.stats span { font-size: 12px; color: var(--muted); }
+details.month { border-top: 1px solid var(--line); }
+details.month summary { list-style: none; cursor: pointer; padding: 10px 0; }
+details.month summary::-webkit-details-marker { display: none; }
+.m-top { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+.m-top b { font-weight: 600; }
+.meter { height: 8px; border-radius: 4px; background: var(--sunk); margin: 6px 0 5px; overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--blue), var(--blue-ink)); }
+.meter.over i { background: var(--danger); }
+.m-sub { font-size: 12.5px; color: var(--muted); }
+.m-sub.over { color: var(--danger); font-weight: 600; }
+.m-list { list-style: none; margin: 0 0 10px; padding: 0; background: var(--paper); border-radius: 9px; font-size: 13px; }
+.m-list li { display: flex; gap: 8px; padding: 6px 10px; border-top: 1px solid var(--line); }
+.m-list li:first-child { border-top: 0; }
+.m-list .grow { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.settings { padding: 16px 18px; display: grid; gap: 12px; }
+.settings label > span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.settings .hint { font-size: 12.5px; color: var(--muted); }
+.row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.danger-btn { border: 1px solid var(--line); background: none; color: var(--danger); border-radius: 9px; padding: 8px; cursor: pointer; font-weight: 600; }
+.store-note { font-size: 12px; color: var(--muted); padding: 0 18px 12px; }
+
+.toast { position: absolute; left: 14px; right: 14px; bottom: 14px; background: var(--ink); color: var(--paper); border-radius: 10px; padding: 10px 14px; font-size: 13.5px; text-align: center; }
+.app-shell { position: relative; }
+
+/* ---------- the long budget line ---------- */
+.long-line { position: relative; height: 56px; color: var(--blue-ink); margin-block: 8px; }
+.long-line svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.long-line b { position: absolute; right: max(24px, calc((100% - 1120px) / 2 + 24px)); top: 12px; font-size: 13px; background: var(--blue); color: var(--on-blue); padding: 3px 10px; border-radius: 5px; font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) {
+  .long-line path { animation: drift 9s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: translateX(0); } to { transform: translateX(-60px); } }
+}
+
+/* ---------- sections ---------- */
+section { padding-block: 64px; }
+.kicker { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-ink); margin-bottom: 12px; }
+section h2 { font-size: clamp(30px, 4vw, 46px); line-height: 1.04; font-weight: 800; max-width: 18ch; }
+.features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 36px; margin-top: 44px; }
+@media (max-width: 860px) { .features { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+.feat h3 { font-size: 21px; font-weight: 700; margin-bottom: 8px; }
+.feat p { color: var(--soft); max-width: 36ch; }
+.feat .glyph { height: 44px; margin-bottom: 14px; display: flex; align-items: center; }
+
+.steps { list-style: none; padding: 0; margin: 44px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; counter-reset: s; }
+@media (max-width: 860px) { .steps { grid-template-columns: minmax(0, 1fr); } }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; counter-increment: s; }
+.steps li::before { content: counter(s); display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: var(--on-blue); font-family: var(--display); font-weight: 800; margin-bottom: 14px; }
+.steps h3 { font-size: 19px; margin-bottom: 6px; }
+.steps p { color: var(--soft); font-size: 15px; }
+
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; margin-top: 40px; }
+@media (max-width: 760px) { .split { grid-template-columns: minmax(0, 1fr); } }
+.where { border-radius: 16px; padding: 24px; }
+.where h3 { font-size: 20px; margin-bottom: 12px; }
+.where ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+.where li { display: flex; gap: 10px; color: var(--soft); }
+.where li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--blue-ink); flex: none; transform: translateY(9px); }
+.where.web { background: var(--surface); border: 1px solid var(--line); }
+.where.ext { background: var(--blue); color: var(--on-blue); }
+.where.ext li { color: var(--on-blue); }
+.where.ext li::before { background: var(--on-blue); }
+
+.closing { text-align: left; padding-block: 72px 88px; display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 28px; }
+.closing h2 { max-width: 16ch; }
+footer { border-top: 1px solid var(--line); padding-block: 22px 32px; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top" id="top">
+      <span class="w" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M2 4h4.2l2.2 9.5L10.6 4h2.8l2.2 9.5L17.8 4H22l-4.4 16h-3.7L12 11.6 10.1 20H6.4z"/></svg></span>
+      Wishlist
+    </a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#chrome" class="nav-cta">Chrome extension</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <p class="eyebrow">A wishlist with a budget built in</p>
+      <h1>Want it. Rank it. <span class="under">Buy it<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 Q 27 2, 52 12 T 102 12 T 152 12 T 198 12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/></svg></span> when it fits.</h1>
+      <p class="lede">Put the things you want in order. Set what you can spend on wants each month. A line drops through your list at the point the money runs out, and everything above it is yours this month.</p>
+      <div class="hero-actions">
+        <a class="cta" href="#chrome">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 5.2a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6Z"/></svg>
+          Get the Chrome extension
+        </a>
+        <span class="cta-note">Free. Your list stays on your device.</span>
+      </div>
+      <p class="try-hint">
+        <svg viewBox="0 0 46 20" aria-hidden="true"><path d="M2 10 Q 12 2, 22 10 T 40 10 M34 4 L41 10 L34 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        This is the real app. Add something, drag a row, press Bought.
+      </p>
+    </div>
+
+    <div class="app-shell">
+      <div class="app" id="app" aria-label="Wishlist app">
+        <div class="app-top">
+          <div class="app-row">
+            <div>
+              <div class="app-title">My list</div>
+              <div class="app-sub num" id="sub">&nbsp;</div>
+            </div>
+            <button class="icon-btn" id="open-settings" title="Settings" aria-label="Settings">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M15.3 4.7l-1.4 1.4M6.1 13.9l-1.4 1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <div class="gauge" id="gauge"><i id="gauge-fill"></i></div>
+          <div class="tabs" role="tablist">
+            <button class="tab" id="tab-list" role="tab" aria-selected="true">Saved</button>
+            <button class="tab" id="tab-bought" role="tab" aria-selected="false">Bought</button>
+            <button class="tab" id="tab-history" role="tab" aria-selected="false">History</button>
+          </div>
+        </div>
+        <div class="example" id="example-bar" hidden>
+          <span><b>Example list.</b> Try it, then start your own.</span>
+          <button class="link-btn" id="start-own">Start my own list</button>
+        </div>
+
+        <div class="pane" id="pane-list">
+          <form class="add" id="add-form" autocomplete="off">
+            <div class="add-row">
+              <div class="field"><input id="add-title" type="text" maxlength="120" placeholder="What do you want?" aria-label="What do you want?"></div>
+              <div class="field"><em class="sym">$</em><input id="add-price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Price" aria-label="Price"></div>
+              <button class="btn" type="submit">Add</button>
+            </div>
+            <button class="more-toggle" type="button" id="more-toggle">+ Link, note or category</button>
+            <div class="add-extra" id="add-extra" hidden>
+              <div class="field"><input id="add-url" type="url" placeholder="Link to the product (optional)" aria-label="Link"></div>
+              <div class="field"><input id="add-note" type="text" maxlength="140" placeholder="Why do you want it?" aria-label="Note"></div>
+              <div class="field"><select id="add-cat" aria-label="Category"></select></div>
+            </div>
+          </form>
+          <ol class="list" id="list"></ol>
+          <p class="empty" id="empty" hidden>Nothing here yet. Add the first thing you want above.</p>
+        </div>
+
+        <div class="pane bought" id="pane-bought" hidden>
+          <div class="log" id="log"></div>
+          <ol class="list" id="bought"></ol>
+          <p class="empty" id="bought-empty" hidden>Nothing bought this month. Press Bought on a saved item, or log something you bought elsewhere.</p>
+        </div>
+
+        <div class="pane" id="pane-history" hidden>
+          <div class="hist" id="history"></div>
+        </div>
+
+        <div class="pane" id="pane-settings" hidden>
+          <div class="settings">
+            <div class="row2">
+              <label><span>Monthly budget for wants</span><div class="field"><em class="sym">$</em><input id="set-budget" type="number" min="0" step="5" inputmode="decimal"></div></label>
+              <label><span>Currency</span><div class="field"><select id="set-currency"></select></div></label>
+            </div>
+            <label><span>Cooling-off for new items</span><div class="field"><select id="set-cool">
+              <option value="0">Off</option><option value="3">3 days</option><option value="7">7 days</option><option value="14">14 days</option><option value="30">30 days</option>
+            </select></div></label>
+            <p class="hint">New items show a countdown, and pressing Bought before it ends asks you to confirm.</p>
+            <div class="row2">
+              <button class="btn" id="set-done" type="button">Done</button>
+              <button class="danger-btn" id="set-clear" type="button">Erase my list</button>
+            </div>
+          </div>
+          <p class="store-note" id="store-note">Your list is saved in this browser only. Nothing is sent anywhere.</p>
+        </div>
+
+        <div class="foot" id="foot"><span id="foot-l"></span><span id="foot-r"></span></div>
+      </div>
+      <div class="toast" id="toast" hidden role="status"></div>
+    </div>
+  </div>
+</div>
+
+<div class="long-line" aria-hidden="true">
+  <svg viewBox="0 0 1600 56" preserveAspectRatio="none"><path d="M-80 28 Q -40 14, 0 28 T 80 28 T 160 28 T 240 28 T 320 28 T 400 28 T 480 28 T 560 28 T 640 28 T 720 28 T 800 28 T 880 28 T 960 28 T 1040 28 T 1120 28 T 1200 28 T 1280 28 T 1360 28 T 1440 28 T 1520 28 T 1600 28 T 1680 28" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+  <b>everything above this line fits</b>
+</div>
+
+<div class="wrap">
+  <section id="features">
+    <p class="kicker">What it does</p>
+    <h2>Ten wants, one budget, no guilt.</h2>
+    <div class="features">
+      <div class="feat">
+        <div class="glyph"><svg width="120" height="30" viewBox="0 0 120 30" aria-hidden="true"><path d="M0 15 Q 10 5, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 15" fill="none" stroke="var(--blue-ink)" stroke-width="2.5"/></svg></div>
+        <h3>A line you can see</h3>
+        <p>Your budget becomes a wavy line through the list. Reorder the list and the line moves. Put something cheaper first and two more things come up above it.</p>
+      </div>
+      <div class="feat">
+        <div class="glyph"><span class="tile" style="--cat: var(--c-home)">7d</span></div>
+        <h3>A cooling-off wait</h3>
+        <p>New items wait a week before they feel ready. Buying one early takes a second tap, which is often enough time to realise you don't need it.</p>
+      </div>
+      <div class="feat">
+        <div class="glyph"><svg width="120" height="30" viewBox="0 0 120 30" aria-hidden="true"><rect x="0" y="11" width="120" height="8" rx="4" fill="var(--sunk)"/><rect x="0" y="11" width="84" height="8" rx="4" fill="var(--blue)"/></svg></div>
+        <h3>Every month on record</h3>
+        <p>Log what you buy anywhere, online or in a shop. On the 1st the month is filed in History, with over-budget months flagged in red.</p>
+      </div>
+      <div class="feat">
+        <div class="glyph"><span style="font-family: var(--display); font-weight: 800; font-size: 26px; color: var(--drop)">&darr; $119</span></div>
+        <h3>Price drops, found for you</h3>
+        <p>The Chrome extension checks the pages you saved once a day. When a price falls, you get a notification and the row shows the old price crossed out.</p>
+      </div>
+      <div class="feat">
+        <div class="glyph" style="gap: 6px"><span class="tile" style="--cat: var(--c-clothes)">M</span><span class="tile" style="--cat: var(--c-tech)">U</span><span class="tile" style="--cat: var(--c-gifts)">B</span></div>
+        <h3>Notes and categories</h3>
+        <p>Write down why you want something, and file it under clothes, home, tech, gifts or other. Click any row to see it all; the list itself stays clean.</p>
+      </div>
+      <div class="feat">
+        <div class="glyph"><span style="font-family: var(--display); font-weight: 800; font-size: 26px">10</span><span style="margin-left: 8px; color: var(--muted); font-size: 14px">slot limit</span></div>
+        <h3>A cap of ten</h3>
+        <p>The eleventh thing makes you choose what to let go of. The list stays short enough to mean something.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <p class="kicker">How it works</p>
+    <h2>Three steps, every month.</h2>
+    <ol class="steps">
+      <li><h3>Save</h3><p>On any product page, click the W tab on the right edge of the screen. The extension reads the name and price for you. On this site, type them in.</p></li>
+      <li><h3>Rank</h3><p>Drag what you want most to the top. The budget line settles wherever the month's money runs out.</p></li>
+      <li><h3>Buy</h3><p>Press Bought and the price comes off this month. The line moves up, and the list starts fresh on the 1st.</p></li>
+    </ol>
+  </section>
+
+  <section id="chrome">
+    <p class="kicker">Web or Chrome</p>
+    <h2>Try it here. Live with it in Chrome.</h2>
+    <div class="split">
+      <div class="where web">
+        <h3>On this page</h3>
+        <ul>
+          <li>The ranked list and budget line</li>
+          <li>Bought, logging outside purchases, History</li>
+          <li>Notes, categories and cooling-off</li>
+          <li>Saved in this browser only</li>
+        </ul>
+      </div>
+      <div class="where ext">
+        <h3>With the Chrome extension</h3>
+        <ul>
+          <li>Save from any shop with one click, price filled in</li>
+          <li>A side tab on every product page showing where it would land</li>
+          <li>Daily price-drop checks and notifications</li>
+          <li>Sync across your Chrome computers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing">
+    <h2>The Chrome Web Store listing is on its way.</h2>
+    <a class="cta" href="#top">Keep trying the web version</a>
+  </div>
+
+  <footer>
+    <span>Wishlist. A rule-of-thumb budget tool, not financial advice.</span>
+    <span>No accounts. No tracking. Your list stays with you.</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var KEY = "wishlist-web-v1";
+  var MAX = 10;
+  var DAY = 86400000;
+  var CATS = [
+    { id: "clothes", label: "Clothes" }, { id: "home", label: "Home" }, { id: "tech", label: "Tech" },
+    { id: "gifts", label: "Gifts" }, { id: "other", label: "Other" },
+  ];
+  var CURRENCIES = ["USD", "EUR", "GBP", "CAD", "AUD", "MXN", "COP", "BRL", "JPY", "INR", "CHF"];
+
+  function monthKey(d) { d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); }
+  function monthsAgo(n) { var d = new Date(); return monthKey(new Date(d.getFullYear(), d.getMonth() - n, 1)); }
+  function monthLabel(k) { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, 1).toLocaleDateString(undefined, { month: "long", year: "numeric" }); }
+  function newId() { return "i" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function dayLabel(ts) { return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" }); }
+
+  // A realistic starting point, clearly marked as an example in the UI.
+  function exampleState() {
+    var now = Date.now();
+    return {
+      example: true, budget: 300, currency: "USD", coolDays: 7, month: monthKey(), passed: 2, passedAtMonthStart: 1,
+      items: [
+        { id: "a", title: "Merino running tee", price: 68, cat: "clothes", note: "Old one has holes", addedAt: now - 20 * DAY },
+        { id: "b", title: "Trail running shoes", price: 119, cat: "clothes", addedAt: now - 15 * DAY },
+        { id: "c", title: "Burr coffee grinder", price: 229, cat: "home", note: "Would replace the blade grinder", addedAt: now - 2 * DAY, coolUntil: now + 5 * DAY },
+        { id: "d", title: "Field guide to birds", price: 24, cat: "gifts", addedAt: now - 30 * DAY },
+        { id: "e", title: "USB-C desk dock", price: 89, cat: "tech", addedAt: now - 3 * DAY },
+      ],
+      purchases: [
+        { id: "p1", title: "Headphone case", price: 30, cat: "tech", at: now - 2 * DAY },
+        { id: "p2", title: "Haircut", price: 35, at: now - 5 * DAY, manual: true },
+      ],
+      history: [
+        { month: monthsAgo(1), budget: 300, spent: 212.5, passed: 2, purchases: [{ title: "Rain boots", price: 89, at: now - 35 * DAY }, { title: "Coffee beans", price: 18.5, at: now - 40 * DAY }, { title: "Desk lamp", price: 105, at: now - 45 * DAY }] },
+        { month: monthsAgo(2), budget: 300, spent: 342, passed: 0, purchases: [{ title: "Noise-cancelling headphones", price: 342, at: now - 70 * DAY }] },
+        { month: monthsAgo(3), budget: 250, spent: 95, passed: 3, purchases: [{ title: "Books", price: 95, at: now - 100 * DAY }] },
+      ],
+    };
+  }
+  function freshState(budget, currency) {
+    return { example: false, budget: budget || 300, currency: currency || "USD", coolDays: 7, month: monthKey(), passed: 0, passedAtMonthStart: 0, items: [], purchases: [], history: [] };
+  }
+
+  // Browser storage is a convenience here: it may be blocked, so the page
+  // always works from memory and saves when it can.
+  var canStore = true;
+  function load() {
+    try { var raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw); } catch (e) { canStore = false; }
+    return exampleState();
+  }
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { canStore = false; } }
+
+  var S = load();
+  var tab = "list", expanded = null, armed = null, logOpen = false, prevTab = "list";
+
+  function rollMonth() {
+    var now = monthKey();
+    if (S.month === now) return;
+    var spent = S.purchases.reduce(function (a, p) { return a + (+p.price || 0); }, 0);
+    S.history = S.history || [];
+    if (!S.history.some(function (h) { return h.month === S.month; })) {
+      S.history.unshift({ month: S.month, budget: S.budget, spent: Math.round(spent * 100) / 100, passed: Math.max(0, S.passed - (S.passedAtMonthStart || 0)),
+        purchases: S.purchases.map(function (p) { return { title: p.title, price: p.price, at: p.at }; }) });
+      S.history = S.history.slice(0, 24);
+    }
+    S.month = now; S.purchases = []; S.passedAtMonthStart = S.passed;
+    persist();
+  }
+  rollMonth();
+
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, props, kids) {
+    var n = document.createElement(tag);
+    if (props) Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === "class") n.className = v;
+      else if (k === "text") n.textContent = v;
+      else if (k === "style") n.setAttribute("style", v);
+      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? "" : v);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+    return n;
+  }
+  function fmt(n) {
+    var v = +n || 0, cents = Math.abs(v % 1) > 0.001 ? 2 : 0;
+    try { return new Intl.NumberFormat(undefined, { style: "currency", currency: S.currency, minimumFractionDigits: cents, maximumFractionDigits: cents }).format(v); }
+    catch (e) { return "$" + v.toFixed(cents); }
+  }
+  function symbol() {
+    try { return new Intl.NumberFormat(undefined, { style: "currency", currency: S.currency }).formatToParts(1).filter(function (p) { return p.type === "currency"; })[0].value; }
+    catch (e) { return "$"; }
+  }
+  var toastTimer;
+  function toast(msg) { var t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 2600); }
+  function spent() { return S.purchases.reduce(function (a, p) { return a + (+p.price || 0); }, 0); }
+  function left() { return Math.max(0, S.budget - spent()); }
+  function line() {
+    var budget = left(), used = 0, cut = S.items.length;
+    for (var i = 0; i < S.items.length; i++) { var p = +S.items[i].price || 0; if (used + p > budget) { cut = i; break; } used += p; }
+    return { cut: cut, used: used, left: budget - used, budgetLeft: budget };
+  }
+  function coolLeft(it) { if (!it.coolUntil) return 0; var ms = it.coolUntil - Date.now(); return ms > 0 ? Math.ceil(ms / DAY) : 0; }
+  function tile(obj) {
+    var m = String(obj.title || "").match(/[A-Za-z0-9À-ɏ]/);
+    return el("span", { class: "tile", style: obj.cat ? "--cat: var(--c-" + obj.cat + ")" : null, text: m ? m[0].toUpperCase() : "?", "aria-hidden": "true" });
+  }
+  function commit() { S.example = S.example && true; persist(); render(); }
+
+  /* ---------------- render ---------------- */
+  function render() {
+    var L = line();
+    $("sub").textContent = S.budget > 0 ? fmt(L.budgetLeft) + " left of " + fmt(S.budget) + " this month" : "Set a monthly budget in settings";
+    var claimed = spent() + L.used;
+    $("gauge-fill").style.width = S.budget > 0 ? Math.min(100, claimed / S.budget * 100) + "%" : "0%";
+    $("gauge").classList.toggle("over", spent() > S.budget);
+    $("example-bar").hidden = !S.example;
+    document.querySelectorAll(".sym").forEach(function (s) { s.textContent = symbol(); });
+
+    var tabs = { list: "Saved " + S.items.length, bought: "Bought " + S.purchases.length, history: "History" };
+    Object.keys(tabs).forEach(function (k) { var t = $("tab-" + k); t.textContent = tabs[k]; t.setAttribute("aria-selected", tab === k ? "true" : "false"); });
+    ["list", "bought", "history", "settings"].forEach(function (k) { $("pane-" + k).hidden = tab !== k; });
+
+    if (tab === "list") renderList(L);
+    if (tab === "bought") renderBought();
+    if (tab === "history") renderHistory();
+
+    var fl = "", fr = "";
+    if (tab === "list") { fl = S.items.length + " of " + MAX + " slots"; fr = S.items.length ? "Click a row for more" : ""; }
+    else if (tab === "bought") { fl = fmt(spent()) + " of " + fmt(S.budget) + " spent"; fr = "Resets on the 1st"; }
+    else if (tab === "history") { fl = "Tap a month to see what you bought"; }
+    else { fl = canStore ? "Saved in this browser" : "Browser storage is off, so changes last until you close this page"; }
+    $("foot-l").textContent = fl; $("foot-r").textContent = fr;
+  }
+
+  function waterRow(L) {
+    var dry = L.budgetLeft <= 0;
+    var li = el("li", { class: "waterline" + (dry ? " dry" : ""), "aria-label": dry ? "Budget spent" : fmt(L.left) + " left this month" });
+    li.innerHTML = '<svg viewBox="0 0 440 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 Q 22 7, 44 14 T 88 14 T 132 14 T 176 14 T 220 14 T 264 14 T 308 14 T 352 14 T 396 14 T 440 14" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
+    li.appendChild(el("b", { class: "num", text: dry ? "Budget spent" : fmt(L.left) + " left" }));
+    return li;
+  }
+
+  function renderList(L) {
+    var ul = $("list"); ul.textContent = "";
+    $("empty").hidden = S.items.length > 0;
+    var sunkCount = S.items.length - L.cut, running = 0;
+    S.items.forEach(function (it, i) {
+      running += +it.price || 0;
+      var sunk = i >= L.cut;
+      if (i === L.cut) ul.appendChild(waterRow(L));
+      var d = !sunk ? 0 : sunkCount === 1 ? 0.85 : 0.72 + 0.28 * ((i - L.cut) / (sunkCount - 1));
+      var open = expanded === it.id, cool = coolLeft(it);
+
+      var meta = el("div", { class: "meta" });
+      if (it.cat) meta.appendChild(el("i", { class: "dot", style: "--cat: var(--c-" + it.cat + ")" }));
+      var status;
+      if (cool > 0) status = el("span", { class: "st-cool", text: "Cooling off · " + (cool === 1 ? "1 day" : cool + " days") });
+      else if (sunk && S.budget > 0) { var m = Math.ceil(running / S.budget); status = el("span", { text: m <= 1 ? "Next month" : m + " months away" }); }
+      else status = el("span", { text: it.url ? hostOf(it.url) : (it.cat ? labelOf(it.cat) : "Fits this month") });
+      meta.appendChild(status);
+
+      var row = el("li", {
+        class: "item" + (sunk ? " sunk" : "") + (open ? " open" : ""),
+        style: "--d:" + d.toFixed(3), draggable: open ? "false" : "true", "aria-expanded": open ? "true" : "false",
+      }, [
+        el("span", { class: "rank num", text: String(i + 1) }),
+        tile(it),
+        el("div", { class: "body" }, [el("div", { class: "t", text: it.title }), meta, !open && it.note ? el("div", { class: "note", text: it.note }) : null]),
+        el("div", { class: "price num", text: it.price != null ? fmt(it.price) : "—" }),
+      ]);
+      if (open) row.appendChild(details(it, i, cool));
+      row.addEventListener("click", function (e) {
+        if (e.target.closest("button, a, input, textarea, select, .details")) return;
+        expanded = open ? null : it.id; armed = null; render();
+      });
+      drag(row, i);
+      ul.appendChild(row);
+    });
+    if (L.cut >= S.items.length && S.items.length) ul.appendChild(waterRow(L));
+  }
+  function hostOf(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return ""; } }
+  function labelOf(id) { var c = CATS.filter(function (c) { return c.id === id; })[0]; return c ? c.label : ""; }
+
+  function details(it, i, cool) {
+    var facts = [];
+    if (it.url) facts.push(hostOf(it.url));
+    if (cool > 0) facts.push("cooling off for " + (cool === 1 ? "1 more day" : cool + " more days"));
+    if (it.addedAt) facts.push("saved " + dayLabel(it.addedAt));
+    var ta = el("textarea", { rows: "2", maxlength: "140", placeholder: "Add a note: why do you want it?", "aria-label": "Note" });
+    ta.value = it.note || "";
+    ta.addEventListener("blur", function () { var v = ta.value.trim() || null; if (v !== (it.note || null)) { it.note = v; persist(); } });
+    ta.addEventListener("keydown", function (e) { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ta.blur(); } });
+    var chips = el("div", { class: "chips", role: "group", "aria-label": "Category" });
+    CATS.forEach(function (c) {
+      chips.appendChild(el("button", { class: "chip", type: "button", style: "--cat: var(--c-" + c.id + ")", "aria-pressed": it.cat === c.id ? "true" : "false",
+        onclick: function () { it.cat = it.cat === c.id ? null : c.id; commit(); } }, [el("i"), el("span", { text: c.label })]));
+    });
+    var isArmed = armed === it.id;
+    var acts = el("div", { class: "acts" }, [
+      el("button", { class: "mini", type: "button", text: "↑", "aria-label": "Move up", disabled: i === 0, onclick: function () { move(i, i - 1); } }),
+      el("button", { class: "mini", type: "button", text: "↓", "aria-label": "Move down", disabled: i === S.items.length - 1, onclick: function () { move(i, i + 1); } }),
+      el("span", { class: "grow" }),
+      it.url ? el("a", { class: "txt-btn", href: it.url, target: "_blank", rel: "noopener", text: "Open page" }) : null,
+      el("button", { class: "txt-btn", type: "button", text: "Drop", onclick: function () { expanded = null; S.items.splice(i, 1); S.passed++; commit(); toast("Dropped. You've passed on " + S.passed + (S.passed === 1 ? " thing." : " things.")); } }),
+      el("button", { class: "pill" + (isArmed ? " warn" : ""), type: "button", text: isArmed ? "Still cooling. Buy anyway?" : "Bought",
+        onclick: function () {
+          if (cool > 0 && !isArmed) { armed = it.id; render(); setTimeout(function () { if (armed === it.id) { armed = null; render(); } }, 4000); return; }
+          armed = null; expanded = null; buy(i);
+        } }),
+    ]);
+    return el("div", { class: "details" }, [facts.length ? el("div", { class: "facts", text: facts.join(" · ") }) : null, ta, chips, acts]);
+  }
+
+  function move(from, to) {
+    if (to < 0 || to >= S.items.length) return;
+    var before = line().cut;
+    var it = S.items.splice(from, 1)[0]; S.items.splice(to, 0, it);
+    var after = line().cut;
+    commit();
+    if (after > before) toast(after - before === 1 ? "One more thing fits this month." : (after - before) + " more things fit this month.");
+  }
+  function buy(i) {
+    var it = S.items.splice(i, 1)[0];
+    S.purchases.push({ id: it.id, title: it.title, price: +it.price || 0, cat: it.cat || null, url: it.url || null, at: Date.now() });
+    commit();
+    toast(left() > 0 ? "Logged. " + fmt(left()) + " left this month." : "Logged. That's the budget for this month.");
+  }
+
+  var dragFrom = null;
+  function drag(row, i) {
+    row.addEventListener("dragstart", function (e) { dragFrom = i; row.style.opacity = ".4"; try { e.dataTransfer.setData("text/plain", String(i)); } catch (x) {} });
+    row.addEventListener("dragend", function () { dragFrom = null; row.style.opacity = ""; document.querySelectorAll(".item").forEach(function (r) { r.style.boxShadow = ""; }); });
+    row.addEventListener("dragover", function (e) {
+      if (dragFrom === null || dragFrom === i) return; e.preventDefault();
+      var r = row.getBoundingClientRect(), above = e.clientY < r.top + r.height / 2;
+      row.style.boxShadow = above ? "inset 0 2px 0 var(--blue-ink)" : "inset 0 -2px 0 var(--blue-ink)";
+    });
+    row.addEventListener("dragleave", function () { row.style.boxShadow = ""; });
+    row.addEventListener("drop", function (e) {
+      e.preventDefault(); if (dragFrom === null || dragFrom === i) return;
+      var r = row.getBoundingClientRect(), to = e.clientY < r.top + r.height / 2 ? i : i + 1;
+      if (dragFrom < to) to--; var f = dragFrom; dragFrom = null; move(f, to);
+    });
+  }
+
+  function renderBought() {
+    var box = $("log"); box.textContent = "";
+    if (!logOpen) {
+      box.appendChild(el("button", { class: "log-open", type: "button", text: "+ Log something you bought elsewhere", onclick: function () { logOpen = true; render(); setTimeout(function () { $("log-t").focus(); }, 20); } }));
+    } else {
+      var t = el("input", { id: "log-t", type: "text", maxlength: "120", placeholder: "What did you buy?", "aria-label": "What did you buy?" });
+      var p = el("input", { id: "log-p", type: "number", min: "0", step: "0.01", inputmode: "decimal", placeholder: "Amount", "aria-label": "Amount" });
+      var submit = function () {
+        var v = parseFloat(p.value);
+        if (!(v > 0)) { toast("Enter what it cost."); p.focus(); return; }
+        S.purchases.push({ id: newId(), title: t.value.trim() || "Purchase", price: Math.round(v * 100) / 100, at: Date.now(), manual: true });
+        logOpen = false; commit(); toast("Logged. " + fmt(left()) + " left this month.");
+      };
+      [t, p].forEach(function (x) { x.addEventListener("keydown", function (e) { if (e.key === "Enter") submit(); if (e.key === "Escape") { logOpen = false; render(); } }); });
+      box.appendChild(el("div", { class: "field" }, [t]));
+      box.appendChild(el("div", { class: "log-grid" }, [
+        el("div", { class: "field" }, [el("em", { text: symbol() }), p]),
+        el("div", { class: "log-grid" }, [
+          el("button", { class: "btn btn-quiet", type: "button", text: "Cancel", onclick: function () { logOpen = false; render(); } }),
+          el("button", { class: "btn", type: "button", text: "Add", onclick: submit }),
+        ]),
+      ]));
+    }
+    var ul = $("bought"); ul.textContent = "";
+    $("bought-empty").hidden = S.purchases.length > 0;
+    S.purchases.slice().sort(function (a, b) { return b.at - a.at; }).forEach(function (pu) {
+      ul.appendChild(el("li", { class: "item" }, [
+        el("span", { class: "rank", text: "✓" }), tile(pu),
+        el("div", { class: "body" }, [
+          el("div", { class: "t", text: pu.title }),
+          el("div", { class: "meta" }, [el("span", { text: (pu.manual ? "Logged by hand, " : "Bought ") + dayLabel(pu.at) })]),
+          el("div", { class: "acts-h" }, [
+            el("button", { class: "txt-btn", type: "button", text: "Not bought", onclick: function () { S.purchases.splice(S.purchases.indexOf(pu), 1); commit(); toast("Removed. " + fmt(left()) + " left this month."); } }),
+            !pu.manual ? el("button", { class: "txt-btn", type: "button", text: "Put back on list", onclick: function () {
+              if (S.items.length >= MAX) { toast("Your list is full. Drop something first."); return; }
+              S.purchases.splice(S.purchases.indexOf(pu), 1);
+              S.items.push({ id: pu.id || newId(), title: pu.title, price: pu.price, cat: pu.cat || null, url: pu.url || null, addedAt: Date.now() });
+              tab = "list"; commit();
+            } }) : null,
+          ]),
+        ]),
+        el("div", { class: "price num", text: fmt(pu.price) }),
+      ]));
+    });
+  }
+
+  function renderHistory() {
+    var box = $("history"); box.textContent = "";
+    var past = (S.history || []).slice().sort(function (a, b) { return a.month < b.month ? 1 : -1; });
+    if (past.length) {
+      var avg = past.reduce(function (a, h) { return a + h.spent; }, 0) / past.length;
+      var ok = past.filter(function (h) { return h.spent <= h.budget; }).length;
+      var passed = past.reduce(function (a, h) { return a + (h.passed || 0); }, 0);
+      box.appendChild(el("div", { class: "stats" }, [
+        el("div", null, [el("b", { class: "num", text: fmt(Math.round(avg)) }), el("span", { text: "avg a month" })]),
+        el("div", null, [el("b", { class: "num", text: ok + " of " + past.length }), el("span", { text: "on budget" })]),
+        el("div", null, [el("b", { class: "num", text: String(passed) }), el("span", { text: "passed on" })]),
+      ]));
+    } else {
+      box.appendChild(el("p", { class: "m-sub", text: "Each month is filed here on the 1st. So far, just this one." }));
+    }
+    var cur = { month: S.month, budget: S.budget, spent: spent(), passed: Math.max(0, S.passed - (S.passedAtMonthStart || 0)), purchases: S.purchases, current: true };
+    [cur].concat(past).forEach(function (m) {
+      var over = m.budget > 0 && m.spent > m.budget, pct = m.budget > 0 ? Math.min(100, m.spent / m.budget * 100) : 0;
+      var n = (m.purchases || []).length;
+      var sub = [n === 1 ? "1 bought" : n + " bought", m.passed ? "passed on " + m.passed : null, over ? "Over by " + fmt(m.spent - m.budget) : fmt(m.budget - m.spent) + " to spare"].filter(Boolean).join(" · ");
+      var list = el("ul", { class: "m-list" });
+      (m.purchases || []).slice().sort(function (a, b) { return (b.at || 0) - (a.at || 0); }).forEach(function (p) {
+        list.appendChild(el("li", null, [el("span", { class: "grow", text: p.title }), el("span", { class: "m-sub", text: p.at ? dayLabel(p.at) : "" }), el("b", { class: "num", text: fmt(p.price) })]));
+      });
+      if (!n) list.appendChild(el("li", { class: "m-sub", text: "Nothing bought." }));
+      box.appendChild(el("details", { class: "month" }, [
+        el("summary", null, [
+          el("div", { class: "m-top" }, [el("b", { text: m.current ? "This month" : monthLabel(m.month) }), el("span", { class: "num", text: fmt(m.spent) + " of " + fmt(m.budget) })]),
+          el("div", { class: "meter" + (over ? " over" : ""), role: "img", "aria-label": fmt(m.spent) + " spent of " + fmt(m.budget) }, [el("i", { style: "width:" + pct.toFixed(1) + "%" })]),
+          el("div", { class: "m-sub" + (over ? " over" : ""), text: (over ? "! " : "") + sub }),
+        ]),
+        list,
+      ]));
+    });
+  }
+
+  /* ---------------- wiring ---------------- */
+  var catSel = $("add-cat");
+  catSel.appendChild(el("option", { value: "", text: "No category" }));
+  CATS.forEach(function (c) { catSel.appendChild(el("option", { value: c.id, text: c.label })); });
+  CURRENCIES.forEach(function (c) { $("set-currency").appendChild(el("option", { value: c, text: c })); });
+
+  ["list", "bought", "history"].forEach(function (k) {
+    $("tab-" + k).addEventListener("click", function () { tab = k; logOpen = false; expanded = null; render(); });
+  });
+  $("more-toggle").addEventListener("click", function () { $("add-extra").hidden = false; $("more-toggle").hidden = true; $("add-url").focus(); });
+  $("add-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = $("add-title").value.trim();
+    if (!title) { toast("Give it a name first."); $("add-title").focus(); return; }
+    if (S.items.length >= MAX) { toast("Ten is the cap. Drop or buy something to make room."); return; }
+    var p = parseFloat($("add-price").value), now = Date.now(), url = $("add-url").value.trim();
+    if (url && !/^https?:\/\//i.test(url)) url = "https://" + url;
+    S.items.push({ id: newId(), title: title, price: p > 0 ? Math.round(p * 100) / 100 : null, url: url || null,
+      note: $("add-note").value.trim() || null, cat: $("add-cat").value || null, addedAt: now,
+      coolUntil: S.coolDays > 0 ? now + S.coolDays * DAY : null });
+    ["add-title", "add-price", "add-url", "add-note"].forEach(function (id) { $(id).value = ""; });
+    $("add-cat").value = "";
+    commit();
+    var L = line(), rank = S.items.length;
+    toast(rank <= L.cut ? "Added at number " + rank + ", above the line." : "Added at number " + rank + ", below the line for now.");
+  });
+  $("open-settings").addEventListener("click", function () {
+    if (tab === "settings") { tab = prevTab; render(); return; }
+    prevTab = tab === "settings" ? "list" : tab;
+    tab = "settings";
+    $("set-budget").value = S.budget; $("set-currency").value = S.currency; $("set-cool").value = String(S.coolDays);
+    $("store-note").textContent = canStore ? "Your list is saved in this browser only. Nothing is sent anywhere." : "Your browser is blocking storage, so this list lasts until you close the page.";
+    render();
+  });
+  $("set-done").addEventListener("click", function () {
+    var b = parseFloat($("set-budget").value);
+    if (b >= 0) S.budget = Math.round(b * 100) / 100;
+    S.currency = $("set-currency").value; S.coolDays = +$("set-cool").value || 0;
+    tab = prevTab; commit(); toast("Settings saved.");
+  });
+  var eraseArmed = false;
+  $("set-clear").addEventListener("click", function () {
+    if (!eraseArmed) { eraseArmed = true; $("set-clear").textContent = "Press again to erase"; setTimeout(function () { eraseArmed = false; $("set-clear").textContent = "Erase my list"; }, 4000); return; }
+    eraseArmed = false; $("set-clear").textContent = "Erase my list";
+    S = freshState(S.budget, S.currency); tab = "list"; commit(); toast("Erased. A clean list.");
+  });
+  $("start-own").addEventListener("click", function () {
+    S = freshState(S.budget, S.currency); tab = "list"; expanded = null; commit();
+    toast("Your own list. Set your budget in settings.");
+    setTimeout(function () { $("add-title").focus(); }, 30);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
